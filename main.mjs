@@ -1,5 +1,11 @@
 import { translateBrailleBinary } from "./src/brailleTranslator.mjs";
+import fs from "node:fs";
 
-let testString = "100000110000100100100110100010110100110001010100010110101000111000101100101110101010111100111110111010001100101001111001010111101101101111101011";
+function init(){
+    let code = fs.readFileSync("data.txt", "utf-8");
+    
+    let codeBrailleDecoded = translateBrailleBinary(code);
+    //console.log(codeBrailleDecoded);
+}
 
-translateBrailleBinary(testString);
+init();
