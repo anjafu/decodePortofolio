@@ -30,7 +30,7 @@ describe("'Translate braille binary' function tests: ", () => {
     });
 
     it("should correctly translate the binaries for decimals", () => {
-        testString = "001111100000000101100010000000101010111010000000110000";
+        testString = "001111100000000101100010000000101010111010000000001111110000";
         expect(translateBrailleBinary(testString)).to.equal("1.5 or 2");
     });
 
