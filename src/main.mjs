@@ -1,8 +1,8 @@
-import { translateBrailleBinary } from "./src/brailleTranslator.mjs";
+import { translateBrailleBinary } from "./brailleTranslator.mjs";
 import fs from "node:fs";
 
 function init(){
-    let code = fs.readFileSync("data.txt", "utf-8");
+    let code = fs.readFileSync("./data/data.txt", "utf-8");
     
     let codeBrailleDecoded = translateBrailleBinary(code);
     //console.log(codeBrailleDecoded);
