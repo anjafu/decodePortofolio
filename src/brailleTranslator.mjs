@@ -1,4 +1,4 @@
-const alphabet = {
+const defaultSymbols = {
         '100000':'a',
         '110000':'b',
         '100100':'c',
@@ -37,12 +37,12 @@ const alphabet = {
     }
 
 const modes = {
-    '000001' : 'uppercase',
-    '000101' : 'decimal',
-    '001111' : 'number'
+    '000001' : capitalMode,
+    '000101' : decimalMode,
+    '001111' : numberMode
 }
 
-const numbers = {
+const numberSymbols = {
     '100000':'1',
     '110000':'2',
     '100100':'3',
@@ -56,29 +56,32 @@ const numbers = {
 }
 
 function translateBrailleBinary(binaryString){
-    let decodedString = "";
+    const binaryChunksArray = (binaryString.replaceAll(" ","")).match(new RegExp(".{6}", "g"));
 
-    const binaryStringChunks = (binaryString.replaceAll(" ","")).match(new RegExp(".{6}", "g"));
+    let decodedString = ""; //not functional programming -> changes a variable, unsure how to fix (tho i tried)
 
-    for (let index in binaryStringChunks){
-        let currentBinary = binaryStringChunks[index];
-        let previousBinary = binaryStringChunks[index - 1]; //to see if its a mode before it
+    binaryChunksArray.forEach((binary, i) => {
+        const modeActive = modes[binaryChunksArray[i-1]];
+        decodedString += modeActive ? modeActive(binary) : defaultMode(binary);
+    });
 
-        if (modes[previousBinary]){ //if previous binary was a mode
-            if(modes[previousBinary] == 'uppercase'){
-                decodedString += (alphabet[currentBinary]).toUpperCase();
-            } else if(modes[previousBinary] == 'decimal'){
-                decodedString += "." + numbers[currentBinary];
-            } else if(modes[previousBinary] == 'number'){
-                decodedString += numbers[currentBinary];
-            }
-
-        } else if(alphabet[currentBinary]){ //ignore modes
-            decodedString += alphabet[currentBinary];
-        }
-    }
-    
     return decodedString;
+}
+
+function defaultMode(binaryString){
+    return defaultSymbols[binaryString] ? defaultSymbols[binaryString] : "";
+}
+
+function capitalMode(binaryString){
+    return (defaultSymbols[binaryString]).toUpperCase();
+}
+
+function numberMode(binaryString){
+    return numberSymbols[binaryString];
+}
+
+function decimalMode(binaryString){
+    return "." + numberSymbols[binaryString];
 }
 
 export {translateBrailleBinary}
