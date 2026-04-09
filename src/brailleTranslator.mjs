@@ -57,15 +57,24 @@ const numberSymbols = {
 
 function translateBrailleBinary(binaryString){
     const binaryChunksArray = (binaryString.replaceAll(" ","")).match(new RegExp(".{6}", "g"));
-
-    let decodedString = ""; //not functional programming -> changes a variable, unsure how to fix (tho i tried)
-
+    /* not functional solution:
+    let decodedString = "";
+    
     binaryChunksArray.forEach((binary, i) => {
         const modeActive = modes[binaryChunksArray[i-1]];
         decodedString += modeActive ? modeActive(binary) : defaultMode(binary);
     });
 
-    return decodedString;
+    return decodedString;*/
+
+    //functional ish solution but maybe too messy and complex? also i do use .push() != functional ...
+    return binaryChunksArray.reduce((acc, curr) => {
+        acc.modeActive && !(modes[curr]) ? acc.arr.push(acc.modeActive(curr)) : acc.arr.push(defaultMode(curr));
+
+        modes[curr] ? acc.modeActive = modes[curr] : acc.modeActive = undefined;
+        return acc;
+    },{arr: [], modeActive: undefined}).arr.join("");
+    //reduce(acc, curr) => acc is previous, curr is current element
 }
 
 function defaultMode(binaryString){
