@@ -5,7 +5,7 @@ function decodeROT(string, key){
     //?? operator: leftside is undefined/null? then we do rightside (findkey function), otherwise it does leftside
     key = key ?? findKey(string); //checks if we already have key, if not, find it
 
-    const movedAlphabet = key <= 0 ? alphabet.slice(0,key) + alphabet.slice(key,26) : alphabet.slice(key) + alphabet.slice(0, key);
+    const movedAlphabet = alphabet.slice(key) + alphabet.slice(0, key);
 
     return [...string].map((char) => { //creates new array where item is what is returned
         return char.match(/[a-z]/i) ? alphabet[movedAlphabet.indexOf(char)] : char; //only changes the letter
@@ -17,7 +17,9 @@ function findKey(string){
     //only want repeated letter so removes anything that isnt a letter (gi = ALL matches)
     const mostRepeatedLetter = mostRepeatedItem(frequencyCount(string.replace(/[^a-z]/gi, "")));
 
-    return alphabet.indexOf(mostRepeatedLetter) - alphabet.indexOf("e");
+    const key =  alphabet.indexOf(mostRepeatedLetter) - alphabet.indexOf("e");
+
+    return key >= 0 ? key : 26 + key; //make the key positive
 }
 
 function frequencyCount(items){
